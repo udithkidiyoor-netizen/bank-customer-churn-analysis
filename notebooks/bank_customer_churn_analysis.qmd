@@ -1,0 +1,115 @@
+---
+title: "Bank Customer Churn Analysis"
+format: html
+---
+
+# Bank Customer Churn Analysis
+
+## Import Libraries and Load Dataset
+
+## Display Initial Records
+```{python}
+import pandas as pd
+data=pd.read_csv("C:/Users/Udith P Kidiyoor/Downloads/Churn_Modelling.csv")
+data.head(15)
+```
+
+## Explore Dataset Structure and Data Types
+```{python}
+data.info()
+```
+
+## Drop Identifier and Non-Predictive Columns
+```{python}
+data=data.drop(columns=["RowNumber","CustomerId","Surname","Gender"])
+```
+
+## Create Loyalty Feature
+```{python}
+data["Loyalty"]=data["Tenure"]/data["Age"]
+data.head(10)
+```
+
+## Descriptive Statistics
+```{python}
+data.describe()
+```
+
+## Check Dataset Shape
+```{python}
+data.shape
+```
+
+## Check for Missing Values
+```{python}
+data.isna().sum()
+```
+
+## Separate Numerical and Categorical Variables
+```{python}
+numerical_features=[]
+categorical_features=[]
+
+for column, typ in data.dtypes.items():
+    if typ=="int64" or typ=="float64":
+        numerical_features.append(column)
+    elif typ=="object":
+        categorical_features.append(column)
+
+numerical_features
+categorical_features
+```
+
+## Import Visualization Libraries
+```{python}
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+## Visualize Numerical Feature Distributions
+```{python}
+plt.figure(figsize=(10,10))
+
+for i, column in enumerate(numerical_features):
+    plt.subplot(6,2,i+1)
+    sns.histplot(data[column], color="pink", kde=True)
+    plt.title(f"Distribution of {column}")
+    plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+```
+
+## Analyze Outliers Using Box Plots
+```{python}
+plt.figure(figsize=(10,10))
+
+for i, column in enumerate(numerical_features):
+    plt.subplot(6,2,i+1)
+    sns.boxplot(data=data, x=column, color="yellow")
+    plt.title(f"Distribution of {column}")
+    plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+```
+
+## Analyze Target Variable Distribution
+```{python}
+data["Exited"].value_counts()
+```
+
+## Analyze Customer Distribution by Geography
+```{python}
+data["Geography"].value_counts()
+```
+
+## Perform One-Hot Encoding
+```{python}
+data=pd.get_dummies(data, drop_first=True, dtype=int)
+```
+
+## Review Transformed Dataset
+```{python}
+data.head(20)
+```
